@@ -4,6 +4,7 @@ interface IModule {
 }
 
 interface IDb {
-	static function connect();
+	function connect($host,$user,$pass,$db,$charset);
+	function query($query);
 }
 ?>

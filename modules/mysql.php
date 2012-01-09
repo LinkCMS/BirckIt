@@ -2,11 +2,8 @@
 class mysql extends core implements IModule, IDb
 {
 	var $info;
-	private static $instance;
 	static $db;
-	
-	//private function __construct() { }
-	
+
 	function main()
 	{
 		$this->info['name']='mysql';
@@ -15,22 +12,17 @@ class mysql extends core implements IModule, IDb
 		$this->info['description']='MySQL database module';
 		return 0;
 	}
-	static function connect($host,$user,$pass,$db,$charset)
+	function connect($host,$user,$pass,$db,$charset)
 	{
-		self::$db=mysql_connect($host,$user,$pass);
-		mysql_select_db($db);
+		if(!self::$db=@mysql_connect($host,$user,$pass))
+		core::loadModule('panic',$this->info['name'],500,'Ошибка подключения к базе данных');
+		if(!@mysql_select_db($db))
+		core::loadModule('panic',$this->info['name'],501,'Ошибка выбора базы данных');
 		self::query('SET NAMES '.$charset);
-		//echo 'asd';
 	}
-	static function query($query)
+	function query($query)
 	{
 		return mysql_query($query);
-	}
-	static function getInstance()
-	{
-		if(is_null(self::$instance))
-		self::$instance=new self();
-		return self::$instance;
 	}
 }
 ?>
