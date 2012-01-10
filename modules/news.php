@@ -8,8 +8,13 @@ class news extends core implements IModule
 		$this->info['version']='0.1';
 		$this->info['author']='Link';
 		$this->info['description']='Модуль вывода новостей';
+		$this->getItems();
 		return 0;
 	}
-	//core::getModule('db')->query('SELECT * FROM `news`');
+	function getItems($count=10)
+	{
+		core::getModule('db')->query('SELECT * FROM `news`');
+		
+	}
 }
 ?>
