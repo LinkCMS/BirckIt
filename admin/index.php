@@ -1,10 +1,25 @@
 <?php
-include('../config.php');
+//include('../config.php');
 include('../core.php');
+header('Content-Type: text/html; charset= utf-8');
 
-$db=core::load_module('mysql','../modules/');
-$db->connect('localhost','root','321vecrek67','radio');
+$db=core::loadModule('mysql','db');
+$db->connect(DB_HOST,DB_USER,DB_PASS,DB_NAME,DB_CHARSET);
+$menu=core::loadModule('menu');
 
+$login=core::loadModule('http_auth');
+//echo $modules->info['version'];
+
+$tpl=core::loadModule('parser','main_tpl');
+$tpl->loadTpl('main.tpl');
+$modules=core::loadModule('modules');
+//$menu->add('Яndex','http://ya.ru');
+//$menu->add('Управление модулями','index.php?action=modules');
+$tpl->parse('{USERNAME}','demo');
+$tpl->parse('{MENU}',implode('<br />',$menu->items));
+$tpl->tpl();
+//$user=$login->login();
+/*
 $login=core::load_module('http_auth');
 $user=$login->login();
 
@@ -19,4 +34,5 @@ $menu->add('Управление модулями','index.php?action=modules');
 $tpl->parse('{MENU}',implode('<br />',$menu->items));
 
 $tpl->tpl();
+*/
 ?>

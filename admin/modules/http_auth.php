@@ -1,18 +1,19 @@
 <?php
-class http_auth extends core implements module
+class http_auth extends core implements IModule
 {
+	var $info;
 	function main()
 	{
-		$module['name']='HTTP Authentication';
-		$module['version']='0.1';
-		$module['author']='Link';
-		$module['description']='Basic access authentication';
-		return $module;
+		$this->info['name']='HTTP Authentication';
+		$this->info['version']='0.1';
+		$this->info['author']='Link';
+		$this->info['description']='Basic access authentication';
+		return 0;
 	}
 	
 	function login()
 	{
-			$realm = 'Запретная зона';
+			$realm = 'Admin room';
 			header('Content-type:text/html; charset="utf-8"');
 			
 			if (empty($_SERVER['PHP_AUTH_DIGEST'])) {
@@ -23,15 +24,12 @@ class http_auth extends core implements module
 				die('Текст, посылаемый, если пользователь нажал Cancel');
 			}
 
-			//echo $_SERVER['PHP_AUTH_DIGEST'];
 			$user=$this->http_digest_parse($_SERVER['PHP_AUTH_DIGEST']);
-			//echo $user['username'];
-			//header('HTTP/1.1 401 Unauthorized');
-			// анализируем переменную PHP_AUTH_DIGEST
+			
+			/*
 			$t=new mysql();
 			$t->connect('localhost','root','321vecrek67','radio');
 			$query=$t->query('SELECT * FROM `users` WHERE `name`="'.$user['username'].'"');
-			//$login_from_db = $t->fetch_row($query);
 			$login_from_db = mysql_fetch_assoc($query);
 
 			if (!$user || !$login_from_db)
@@ -39,17 +37,34 @@ class http_auth extends core implements module
 				//header('HTTP/1.1 401 Unauthorized');
 				die('Неправильные данные!');
 			}
+			*/
+			//$login_from_db = core::get('db')->mysql_fetch_assoc($query);
 
+			$query=core::getModule('db')->query('SELECT * FROM `users` WHERE `login`="'.$user['username'].'"');
+			$login_from_db = mysql_fetch_assoc($query);
+			if (!$user || !$login_from_db)
+			{
+				echo '1';
+				//header('HTTP/1.1 401 Unauthorized');
+				die('Неправильные данные!');
+			}
+			
 			// генерируем корректный ответ
-			$A1 = md5($user['username'] . ':' . $realm . ':' . $login_from_db['pass']);
+			//$A1 = md5($user['username'] . ':' . $realm . ':' . $login_from_db['pass']);
+			$A1 = md5($user['username'] . ':' . $realm . ':' . 'admin');
 			$A2 = md5($_SERVER['REQUEST_METHOD'].':'.$user['uri']);
 			$valid_response = md5($A1.':'.$user['nonce'].':'.$user['nc'].':'.$user['cnonce'].':'.$user['qop'].':'.$A2);
 
+//echo $valid_response;
+
 			if ($user['response'] != $valid_response)
+			{
+				echo '2';
 				die('Неправильные данные!');
+			}
 
 			// ok, логин и пароль верны
-			//echo 'Вы вошли как: ' . $user['username'];
+			echo 'Вы вошли как: ' . $user['username'];
 			return $user['username'];
 	}
 			// функция разбора заголовка http auth

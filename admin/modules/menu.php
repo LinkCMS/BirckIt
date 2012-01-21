@@ -1,14 +1,15 @@
 <?php
-class menu extends core implements module
+class menu extends core implements IModule
 {
 	var $items;
+	var $info;
 	function main()
 	{
-		$module['name']='Menu';
-		$module['version']='0.1';
-		$module['author']='Link';
-		$module['description']='Menu sample';
-		return $module;
+		$this->info['name']='menu';
+		$this->info['version']='0.1';
+		$this->info['author']='Link';
+		$this->info['description']='Admin menu';
+		return 0;
 	}
 	function add($title,$url)
 	{

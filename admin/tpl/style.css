@@ -10,6 +10,7 @@ font-size:14px;
 float:left;
 width:15%;
 height:100%;
+text-align:center;
 background-color:#ffffff;
 }
 #menu a
@@ -22,14 +23,15 @@ margin-left:10px;
 width:83%;
 margin:10px 0px 0px 10px;
 float:left;
-height:96%;
 background-color:#FEA501;
 border-left:1px solid #E58A00;
+border-radius:10px;
 }
 #main #user
 {
 height:25px;
 width:100%;
+border-radius:10px;
 background-color:#E58A00;
 }
 #main #user span
@@ -42,4 +44,18 @@ font-size:12px;
 #logo
 {
 width:100%;
+}
+#content
+{
+padding:10px;
+}
+#content hr
+{
+border:1px dashed #E58A00;
+}
+#content p
+{
+background-color:#E58A00;
+padding:7px;
+border-radius:7px;
 }

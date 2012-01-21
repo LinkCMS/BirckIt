@@ -1,11 +1,25 @@
 <?php
-include('./interfaces.php');
-include('./config.php');
+include(__DIR__.'/interfaces.php');
+include(__DIR__.'/config.php');
 
 function __autoload($class)
 {
-	if(file_exists(MOD_DIR.$class.'.php'))
+	/*
+	if(file_exists(MOD_DIR.$class.'.php')) // Проверяем наличие файла относительно текущей папки
     include(MOD_DIR.$class.'.php');
+    elseif(file_exists('../'.MOD_DIR.$class.'.php')) // Если нет, спускаемся на уровень ниже и пытаемся найти там
+    include('.'.MOD_DIR.$class.'.php');
+    elseif(file_exists(MOD_DIR.$class.'.phar'))
+    {
+		include(MOD_DIR.$class.'.phar');
+		//$a=new Phar(MOD_DIR.$class.'.phar');
+		//$a->setDefaultStub('class.php', 'web/index.php');
+	}
+	*/
+	if(file_exists(MOD_DIR.$class.'.phar'))
+    {
+		include(MOD_DIR.$class.'.phar');
+	}
     else
     {
 		core::loadModule('panic',$class,200,'Ошибка загрузки модуля "'.$class.'". Такого файла не существует');
@@ -15,7 +29,8 @@ function __autoload($class)
 
 class Registry
 {
-	static private $data = array();
+	//static private $data = array();
+	static $data = array();
 	static public function set($key, $value) 
 	{
 		self::$data[$key] = $value;
@@ -24,7 +39,7 @@ class Registry
 	{
 		$alias=@self::$data[$key];
 		if(!$alias)
-		core::loadModule('panic',$key,300,'Ошибка обращения к алиасу "'.$key.'". Данный алиас не зарегистрирован');
+		core::loadModule('panic',$key,300,'Ошибка обращения к алиасу "'.$key.'". Данный аллиас не зарегистрирован');
 		return $alias;
 	}
 	static public function remove($key)
@@ -35,13 +50,12 @@ class Registry
 }
 
 abstract class core {
-	
 	function getModule($allias)
 	{
 		return Registry::get($allias);
 	}
 	
-	function loadModule($module,$allias=NULL)
+	function loadModule($module,$allias=null,$args=null)
 	{	
 		$mod=new $module;
 		$headers = array('name','version','author','description');
@@ -50,15 +64,18 @@ abstract class core {
 		
 		try
 		{
-			if($error=$mod->main(func_get_args()))
+			if($error=$mod->main(array_slice(func_get_args(),2)))
 			throw new Exception('Функция main() выполнилась с ошибкой',$error);
 			else
-			if($diff=array_diff(array_values($headers),array_keys($mod->info)))
+			{
+			(@$mod->info)?$info=array_keys($mod->info):$info=array();
+			if($diff=array_diff(array_values($headers),$info))
 			throw new Exception('Ошибка инициализации модуля. Отсутствуют заголовки: <b>'.implode(', ',$diff).'</b>',100);
+			}
 		}
 		catch(Exception $e)
 		{
-			self::load_module('panic',$module,$e->getCode(),$e->getMessage());
+			self::loadModule('panic',$module,$e->getCode(),$e->getMessage());
 		}
 		
 		return $mod;
