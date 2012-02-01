@@ -2,6 +2,7 @@
 <head>
 	<title>Администрирование</title>
 	<script type="text/javascript" src="../js/jquery.js"></script>
+	<script type="text/javascript" src="./js/admin.js"></script>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<link href="tpl/style.css" rel="stylesheet" />
 </head>

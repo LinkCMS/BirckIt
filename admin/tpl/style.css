@@ -8,15 +8,24 @@ font-size:14px;
 #menu
 {
 float:left;
-width:15%;
+width:210px;
 height:100%;
 text-align:center;
 background-color:#ffffff;
 }
 #menu a
 {
-color:#E58A00;
+font-size:13px;
+line-height:20px;
+text-decoration:none;
+border-bottom:1px dashed #E58A00;
+color:#FEA501;
 margin-left:10px;
+}
+#menu a:hover
+{
+border-bottom:1px dotted #E58A00;
+color:#E58A00;
 }
 #main
 {
@@ -56,6 +65,27 @@ border:1px dashed #E58A00;
 #content p
 {
 background-color:#E58A00;
-padding:7px;
+padding:5px;
+width:100%;
+margin-left:-5px;
+border-radius:7px;
+}
+#modules div
+{
+padding:5px 5px 0px 5px;
+}
+legend
+{
+padding:0px 5px;
+}
+fieldset
+{
+border:1px double #E58A00;
+border-radius:7px;
+margin-bottom:10px;
+}
+.hover
+{
+background-color:#E58A00;
 border-radius:7px;
 }

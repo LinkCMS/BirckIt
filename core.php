@@ -4,22 +4,16 @@ include(__DIR__.'/config.php');
 
 function __autoload($class)
 {
-	/*
 	if(file_exists(MOD_DIR.$class.'.php')) // Проверяем наличие файла относительно текущей папки
     include(MOD_DIR.$class.'.php');
     elseif(file_exists('../'.MOD_DIR.$class.'.php')) // Если нет, спускаемся на уровень ниже и пытаемся найти там
     include('.'.MOD_DIR.$class.'.php');
-    elseif(file_exists(MOD_DIR.$class.'.phar'))
-    {
-		include(MOD_DIR.$class.'.phar');
-		//$a=new Phar(MOD_DIR.$class.'.phar');
-		//$a->setDefaultStub('class.php', 'web/index.php');
-	}
-	*/
-	if(file_exists(MOD_DIR.$class.'.phar'))
-    {
-		include(MOD_DIR.$class.'.phar');
-	}
+	/*
+	if(file_exists(MOD_DIR.$class.'.phar')) // Проверяем наличие файла относительно текущей папки
+    include(MOD_DIR.$class.'.phar');
+    elseif(file_exists('../'.MOD_DIR.$class.'.phar')) // Если нет, спускаемся на уровень ниже и пытаемся найти там
+    include('.'.MOD_DIR.$class.'.phar');
+    */
     else
     {
 		core::loadModule('panic',$class,200,'Ошибка загрузки модуля "'.$class.'". Такого файла не существует');
